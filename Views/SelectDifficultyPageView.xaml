@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Snake.Views.SelectDifficultyPageView"
+             Size="300, 200"
+             Color="Transparent">
+
+    <Frame BackgroundColor="#4b752d" CornerRadius="10" BorderColor="White">
+        <Grid RowSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="Уровень сложности" HorizontalOptions="CenterAndExpand" FontSize="30" HorizontalTextAlignment="Center"/>
+            <Line Grid.Row="1" X1="0" X2="250" Stroke="White" StrokeThickness="1.2" HorizontalOptions="CenterAndExpand"/>
+            <Grid Grid.Row="2" ColumnSpacing="20" Margin="0, 10, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Text="1" TextColor="White" FontSize="25" BackgroundColor="Transparent" BorderColor="White" BorderWidth="1" Command="{Binding SelectedDifficultyGameCommand}" CommandParameter="1"/>
+                <Button Grid.Column="1" Text="2" TextColor="White" FontSize="25" BackgroundColor="Transparent" BorderColor="White" BorderWidth="1" Command="{Binding SelectedDifficultyGameCommand}" CommandParameter="2"/>
+                <Button Grid.Column="2" Text="3" TextColor="White" FontSize="25" BackgroundColor="Transparent" BorderColor="White" BorderWidth="1" Command="{Binding SelectedDifficultyGameCommand}" CommandParameter="3"/>
+            </Grid>
+        </Grid>
+    </Frame>
+
+</toolkit:Popup>
