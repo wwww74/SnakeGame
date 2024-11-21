@@ -5,8 +5,6 @@ namespace Snake.Views
 {
     public partial class MainPageView : ContentPage
     {
-        int count = 0;
-
         public MainPageView()
         {
             InitializeComponent();

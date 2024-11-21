@@ -16,14 +16,14 @@ namespace Snake.ViewModels
         private int _rowCount = 10;
         private int _columnCount = 10;
         private const int SPEED = 500;
-        private int _snakeSpeed;
-        private float _speedBoost;
+        private int _snakeSpeed = SPEED;
+        private float _speedBoost = 0.95f;
         private int _scoreCount;
 
         private SnakeModel _snake;
         private MoveDirection _currentMoveDirection = MoveDirection.Right;
         private CellViewModel _lastFood;
-        private GamePageView _mainView;
+        private readonly GamePageView _mainView;
         private int _difficulty;
         public List<List<CellViewModel>> GameArea { get; } = new List<List<CellViewModel>>();
         #endregion
@@ -74,6 +74,7 @@ namespace Snake.ViewModels
             _mainView = mainPageView;
             VisibleStartButton = true;
             Score = -1;
+
             StartGameCommand = new RelayCommand(StartGameButton_Click);
             MoveUpCommand = new RelayCommand(MoveUpButton_Click);
             MoveDownCommand = new RelayCommand(MoveDownButton_Click);
@@ -160,7 +161,7 @@ namespace Snake.ViewModels
                 {
                     _snake.Move(_currentMoveDirection);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ContinueGame = false;
                     _mainView.ShowPopup(new GameOverPageView(this));
@@ -187,6 +188,7 @@ namespace Snake.ViewModels
             VisibleStartButton = true;
             Score = -1;
             _snakeSpeed = SPEED;
+            _speedBoost = 0.95f;
             _snake.Restart();
             _lastFood.CellType = CellType.None;
             CreateFood();

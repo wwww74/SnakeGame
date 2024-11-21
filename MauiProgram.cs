@@ -15,7 +15,9 @@ namespace Snake
                 fonts.AddFont("TeletactileRus.ttf", "Teletact");
             }).UseMauiCommunityToolkit();
 
+#if DEBUG
             builder.Logging.AddDebug();
+#endif
             return builder.Build();
         }
     }

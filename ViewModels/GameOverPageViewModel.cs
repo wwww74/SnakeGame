@@ -24,7 +24,7 @@ namespace Snake.ViewModels
 
         private void RestartGameButton_Click(object parameter)
         {
-            _gamePage.RestartGame();
+            //_gamePage.RestartGame();
             _gameOverView.Close();
         }
         private async void ShowMenuButton_Click(object parameter)
