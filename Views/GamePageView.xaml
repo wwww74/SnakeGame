@@ -9,7 +9,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -31,23 +31,22 @@
         </Frame>
 
         <StackLayout Grid.Row="0" Grid.RowSpan="3" ZIndex="1" BackgroundColor="Black" Opacity="0.4" 
-                     IsVisible="{Binding VisibleStartButton, Converter={converters:BoolToVisibleConverter}}"/>
+                     IsVisible="{Binding VisibleStartButton}"/>
         
         <Button Grid.Row="1" ZIndex="2"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"
                 Text="Начать игру" FontSize="30" TextColor="White"
                 BackgroundColor="#abd750" BorderColor="Black" BorderWidth="2"
-                IsVisible="{Binding VisibleStartButton, Converter={converters:BoolToVisibleConverter}}"
+                IsVisible="{Binding VisibleStartButton}"
                 Command="{Binding StartGameCommand}"/>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding GameArea}" BackgroundColor="#abd750" Margin="10, 60, 10, 0" ItemsLayout="HorizontalList" 
+        <CollectionView Grid.Row="1" ItemsSource="{Binding GameArea}" BackgroundColor="Transparent" ItemsLayout="VerticalList" 
                         HorizontalScrollBarVisibility="Never"
-                        HorizontalOptions="CenterAndExpand"
-                        IsEnabled="False">
+                        HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <CollectionView ItemsSource="{Binding}" ItemsLayout="VerticalList">
+                    <CollectionView ItemsSource="{Binding}" BackgroundColor="#abd750" ItemsLayout="HorizontalList" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid HeightRequest="30" WidthRequest="30" Margin="0.5">
@@ -87,10 +86,10 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="1" IsEnabled="{Binding EnabledButton}" Text="Вверх" FontSize="25" CornerRadius="5" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveLeftCommand}"/>
-                <Button Grid.Row="1" Grid.Column="0" IsEnabled="{Binding EnabledButton}" Text="Влево" FontSize="25" CornerRadius="5" HorizontalOptions="CenterAndExpand" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveUpCommand}"/>
-                <Button Grid.Row="1" Grid.Column="2" IsEnabled="{Binding EnabledButton}" Text="Вправо" FontSize="25" CornerRadius="5" HorizontalOptions="CenterAndExpand" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveDownCommand}"/>
-                <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding EnabledButton}" Text="Вниз" FontSize="25" CornerRadius="5" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveRightCommand}"/>
+                <Button Grid.Row="0" Grid.Column="1" IsEnabled="{Binding EnabledButton}" Text="Вверх" FontSize="25" CornerRadius="5" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveUpCommand}"/>
+                <Button Grid.Row="1" Grid.Column="0" IsEnabled="{Binding EnabledButton}" Text="Влево" FontSize="25" CornerRadius="5" HorizontalOptions="CenterAndExpand" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveLeftCommand}"/>
+                <Button Grid.Row="1" Grid.Column="2" IsEnabled="{Binding EnabledButton}" Text="Вправо" FontSize="25" CornerRadius="5" HorizontalOptions="CenterAndExpand" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveRightCommand}"/>
+                <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding EnabledButton}" Text="Вниз" FontSize="25" CornerRadius="5" TextColor="White" BorderColor="White" BorderWidth="1" BackgroundColor="Transparent" Command="{Binding MoveDownCommand}"/>
             </Grid>
         </Frame>
     </Grid>

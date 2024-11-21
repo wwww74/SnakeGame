@@ -11,7 +11,7 @@ namespace Snake.ViewModels
     public class GamePageViewModel : BaseViewModel
     {
         #region GameVariable
-        private bool _visibleStartButton;
+        private bool _visibleStartButton = true;
         private bool _continueGame;
         private int _rowCount = 10;
         private int _columnCount = 10;
@@ -107,10 +107,12 @@ namespace Snake.ViewModels
         #endregion
 
         #region MoveButton
-        private void MoveUpButton_Click(object parameter)
+        private async void MoveUpButton_Click(object parameter)
         {
             if (_currentMoveDirection != MoveDirection.Down)
+            {
                 _currentMoveDirection = MoveDirection.Up;
+            }
         }
         private void MoveDownButton_Click(object parameter)
         {
