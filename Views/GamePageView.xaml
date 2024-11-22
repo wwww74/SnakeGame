@@ -24,9 +24,9 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Text="Счёт:" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
-                <Label Grid.Column="1" Text="{Binding Score}" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Column="1" Text="{Binding ScoreLabel}" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
                 <Label Grid.Column="3" Text="Рекорд:" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
-                <Label Grid.Column="4" Text="0" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
+                <Label Grid.Column="4" Text="{Binding HighScoreLabel}" TextColor="White" FontSize="25" VerticalOptions="CenterAndExpand"/>
             </Grid>
         </Frame>
 

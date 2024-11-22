@@ -30,7 +30,7 @@ namespace Snake.ViewModels
         private async void ShowMenuButton_Click(object parameter)
         {
             _gameOverView.Close();
-            await Shell.Current.GoToAsync(nameof(MainPageView));
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

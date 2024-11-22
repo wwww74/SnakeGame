@@ -1,5 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using Snake.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Snake.Interfaces;
+using Snake.Services;
+using Snake.ViewModels;
 
 namespace Snake
 {
@@ -15,9 +20,15 @@ namespace Snake
                 fonts.AddFont("TeletactileRus.ttf", "Teletact");
             }).UseMauiCommunityToolkit();
 
-#if DEBUG
+            builder.Services.AddTransient<GamePageViewModel>();
+            builder.Services.AddTransient<ScorePageViewModel>();
+
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlite($"Filename={Path.Combine(FileSystem.AppDataDirectory, "SnakeDatabase.db")}");
+            });
+            builder.Services.AddTransient<IDatabaseService, DatabaseService>();
             builder.Logging.AddDebug();
-#endif
             return builder.Build();
         }
     }

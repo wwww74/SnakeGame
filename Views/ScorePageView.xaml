@@ -2,13 +2,45 @@
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="Snake.Views.ScorePageView">
+             x:Class="Snake.Views.ScorePageView"
+             Size="300, 330"
+             Color="Transparent">
 
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-    
+    <Frame BackgroundColor="#505050" CornerRadius="10" BorderColor="White">
+        <Grid RowSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="Рекорды" HorizontalOptions="CenterAndExpand" FontSize="40" HorizontalTextAlignment="Center"/>
+            <Line Grid.Row="1" X1="0" X2="250" Stroke="White" StrokeThickness="1.2" HorizontalOptions="CenterAndExpand"/>
+            <ListView Grid.Row="2" ItemsSource="{Binding ScoreList}" 
+                      HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+                      VerticalScrollBarVisibility="Never" BackgroundColor="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <Grid>
+                                        <Label Grid.Row="0" 
+                                               Text="{Binding Id}" TextColor="White" FontSize="20"
+                                               HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0, 0, 50, 0"/>
+                                        <Label Grid.Row="0" 
+                                               Text="." TextColor="White" FontSize="30"
+                                               HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="0, 0, 25, 5"/>
+                                        <Label Grid.Row="0"  
+                                               Text="{Binding Score}" TextColor="White" FontSize="30"
+                                               HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Margin="30, 0, 0, 0"/>
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Frame>
+
 </toolkit:Popup>

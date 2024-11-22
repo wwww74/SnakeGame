@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using Snake.Base;
 using Snake.Enumerated;
+using Snake.Interfaces;
 using Snake.Models;
 using Snake.Views;
 using System.Windows.Input;
@@ -19,6 +20,7 @@ namespace Snake.ViewModels
         private int _snakeSpeed = SPEED;
         private float _speedBoost = 0.95f;
         private int _scoreCount;
+        private int _highScore;
 
         private SnakeModel _snake;
         private MoveDirection _currentMoveDirection = MoveDirection.Right;
@@ -26,6 +28,8 @@ namespace Snake.ViewModels
         private readonly GamePageView _mainView;
         private int _difficulty;
         public List<List<CellViewModel>> GameArea { get; } = new List<List<CellViewModel>>();
+
+        private readonly IDatabaseService _databaseService;
         #endregion
 
         #region ViewProperty
@@ -58,22 +62,33 @@ namespace Snake.ViewModels
                 OnPropertyChanged(nameof(Difficulty));
             }
         }
-        public int Score
+        public int ScoreLabel
         {
             get => _scoreCount;
             set
             {
                 _scoreCount = value;
-                OnPropertyChanged(nameof(Score));
+                OnPropertyChanged(nameof(ScoreLabel));
+            }
+        }
+        public int HighScoreLabel
+        {
+            get => _highScore;
+            set
+            {
+                _highScore = value;
+                OnPropertyChanged(nameof(HighScoreLabel));
             }
         }
         #endregion
 
-        public GamePageViewModel(GamePageView mainPageView)
+        public GamePageViewModel(GamePageView mainPageView, IDatabaseService databaseService)
         {
             _mainView = mainPageView;
+            _databaseService = databaseService;
             VisibleStartButton = true;
-            Score = -1;
+            ScoreLabel = -1;
+            HighScoreLabel = _databaseService.GetHighScore();
 
             StartGameCommand = new RelayCommand(StartGameButton_Click);
             MoveUpCommand = new RelayCommand(MoveUpButton_Click);
@@ -166,6 +181,7 @@ namespace Snake.ViewModels
                 catch (Exception)
                 {
                     ContinueGame = false;
+                    _databaseService.Add(new ScoresModel { Id = _databaseService.GetMaxIdScore() + 1, Score = ScoreLabel });
                     _mainView.ShowPopup(new GameOverPageView(this));
                 }
             }
@@ -182,13 +198,14 @@ namespace Snake.ViewModels
                 CreateFood();
 
             _lastFood.CellType = CellType.Food;
-            Score++;
+            ScoreLabel++;
             _snakeSpeed = (int)(_snakeSpeed * _speedBoost);
         }
         public void RestartGame()
         {
             VisibleStartButton = true;
-            Score = -1;
+            ScoreLabel = -1;
+            HighScoreLabel = _databaseService.GetHighScore();
             _snakeSpeed = SPEED;
             _speedBoost = 0.95f;
             _snake.Restart();
