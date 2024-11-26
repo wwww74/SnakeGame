@@ -6,7 +6,7 @@ namespace Snake.Interfaces
     {
         bool Add(ScoresModel scoresModel);
         List<ScoresModel> GetFiveHighScores();
-        int GetHighScore();
+        int GetHighScore(string difficulty);
         int GetMaxIdScore();
     }
 }

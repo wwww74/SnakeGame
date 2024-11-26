@@ -18,10 +18,10 @@ namespace Snake.Services
             catch { return false; }
         }
 
-        public List<ScoresModel> GetFiveHighScores() => context.Scores.FromSqlRaw("SELECT * FROM Scores ORDER BY Score DESC LIMIT 5").ToList(); 
-        public int GetHighScore()
+        public List<ScoresModel> GetFiveHighScores() => context.Scores.FromSqlRaw("SELECT * FROM Scores ORDER BY Score DESC LIMIT 5").ToList();
+        public int GetHighScore(string difficulty)
         {
-            try { return context.Scores.ToList().Max(p => p.Score); }
+            try { return context.Scores.ToList().Where(p => p.Difficulty == difficulty).Max(p => p.Score ); }
             catch { return 0; }
         }
         public int GetMaxIdScore()

@@ -20,14 +20,16 @@ namespace Snake
                 fonts.AddFont("TeletactileRus.ttf", "Teletact");
             }).UseMauiCommunityToolkit();
 
-            builder.Services.AddTransient<GamePageViewModel>();
-            builder.Services.AddTransient<ScorePageViewModel>();
-
             builder.Services.AddDbContext<ApplicationContext>(options =>
             {
                 options.UseSqlite($"Filename={Path.Combine(FileSystem.AppDataDirectory, "SnakeDatabase.db")}");
             });
+
             builder.Services.AddTransient<IDatabaseService, DatabaseService>();
+
+            builder.Services.AddTransient<MainPageViewModel>();
+            builder.Services.AddTransient<GamePageViewModel>();
+
             builder.Logging.AddDebug();
             return builder.Build();
         }

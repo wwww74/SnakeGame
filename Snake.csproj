@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-maccatalyst;net8.0-android34.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
@@ -18,6 +17,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<!--<EnableMauiFontProcessing>false</EnableMauiFontProcessing>-->
 
 		<!-- Display name -->
 		<ApplicationTitle>Snake</ApplicationTitle>
@@ -50,6 +50,7 @@
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
+		<MauiFont Include="Resources\Fonts\TeletactileRus.ttf" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -85,12 +86,6 @@
 	  <MauiXaml Update="Views\GamePageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ScorePageView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\SelectDifficultyPageView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadUnhandledDeviceExceptionSnakeHideInfoBar="True" /></VisualStudio></ProjectExtensions>
@@ -101,6 +96,26 @@
 		<AndroidSigningStorePass>ProAwpGGX1488</AndroidSigningStorePass>
 		<AndroidSigningKeyAlias>MauitestAlias</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>ProAwpGGX1488</AndroidSigningKeyPass>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+	  <ApplicationId>com.MaxAndVika.snake</ApplicationId>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android34.0|AnyCPU'">
+	  <ApplicationId>com.MaxAndVika.snake</ApplicationId>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
+	  <ApplicationId>com.MaxAndVika.snake</ApplicationId>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
+	  <ApplicationId>com.MaxAndVika.snake</ApplicationId>
+	  <ApplicationDisplayVersion>1.1.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 </Project>

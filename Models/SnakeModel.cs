@@ -73,9 +73,8 @@ namespace Snake.Models
         public void Restart()
         {
             foreach (var cell in SnakeCells)
-            {
                 cell.CellType = CellType.None;
-            }
+
             SnakeCells.Clear();
             _start.CellType = CellType.Snake;
             SnakeCells.Enqueue(_start);

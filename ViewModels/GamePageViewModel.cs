@@ -21,15 +21,55 @@ namespace Snake.ViewModels
         private float _speedBoost = 0.95f;
         private int _scoreCount;
         private int _highScore;
+        private int _difficulty;
+        private string _nameDifficulty;
 
         private SnakeModel _snake;
         private MoveDirection _currentMoveDirection = MoveDirection.Right;
         private CellViewModel _lastFood;
         private readonly GamePageView _mainView;
-        private int _difficulty;
         public List<List<CellViewModel>> GameArea { get; } = new List<List<CellViewModel>>();
 
         private readonly IDatabaseService _databaseService;
+        #endregion
+
+        public GamePageViewModel(GamePageView mainPageView, IDatabaseService databaseService)
+        {
+            _mainView = mainPageView;
+            _databaseService = databaseService;
+            VisibleStartButton = true;
+            ScoreLabel = -1;
+            HighScoreLabel = 0;
+
+            StartGameCommand = new RelayCommand(StartGameButton_Click);
+            MoveUpCommand = new RelayCommand(MoveUpButton_Click);
+            MoveDownCommand = new RelayCommand(MoveDownButton_Click);
+            MoveLeftCommand = new RelayCommand(MoveLeftButton_Click);
+            MoveRightCommand = new RelayCommand(MoveRightButton_Click);
+
+            for (int row = 0; row < _rowCount; row++)
+            {
+                var rowList = new List<CellViewModel>();
+
+                for (int column = 0; column < _columnCount; column++)
+                {
+                    var cell = new CellViewModel(row, column);
+                    rowList.Add(cell);
+                }
+
+                GameArea.Add(rowList);
+            }
+
+            _snake = new SnakeModel(GameArea, GameArea[_rowCount / 2][_columnCount / 2], CreateFood);
+            CreateFood();
+        }
+
+        #region ICommand
+        public ICommand StartGameCommand { get; }
+        public ICommand MoveUpCommand { get; }
+        public ICommand MoveDownCommand { get; }
+        public ICommand MoveLeftCommand { get; }
+        public ICommand MoveRightCommand { get; }
         #endregion
 
         #region ViewProperty
@@ -82,47 +122,8 @@ namespace Snake.ViewModels
         }
         #endregion
 
-        public GamePageViewModel(GamePageView mainPageView, IDatabaseService databaseService)
-        {
-            _mainView = mainPageView;
-            _databaseService = databaseService;
-            VisibleStartButton = true;
-            ScoreLabel = -1;
-            HighScoreLabel = _databaseService.GetHighScore();
-
-            StartGameCommand = new RelayCommand(StartGameButton_Click);
-            MoveUpCommand = new RelayCommand(MoveUpButton_Click);
-            MoveDownCommand = new RelayCommand(MoveDownButton_Click);
-            MoveLeftCommand = new RelayCommand(MoveLeftButton_Click);
-            MoveRightCommand = new RelayCommand(MoveRightButton_Click);
-
-            for (int row = 0; row < _rowCount; row++)
-            {
-                var rowList = new List<CellViewModel>();
-
-                for (int column = 0; column < _columnCount; column++)
-                {
-                    var cell = new CellViewModel(row, column);
-                    rowList.Add(cell);
-                }
-
-                GameArea.Add(rowList);
-            }
-
-            _snake = new SnakeModel(GameArea, GameArea[_rowCount / 2][_columnCount / 2], CreateFood);
-            CreateFood();
-        }
-
-        #region ICommand
-        public ICommand StartGameCommand { get; }
-        public ICommand MoveUpCommand { get; }
-        public ICommand MoveDownCommand { get; }
-        public ICommand MoveLeftCommand { get; }
-        public ICommand MoveRightCommand { get; }
-        #endregion
-
         #region MoveButton
-        private async void MoveUpButton_Click(object parameter)
+        private void MoveUpButton_Click(object parameter)
         {
             if (_currentMoveDirection != MoveDirection.Down)
             {
@@ -157,18 +158,23 @@ namespace Snake.ViewModels
             switch (Difficulty)
             {
                 case 1:
+                    _nameDifficulty = "Легкий";
                     _snakeSpeed = SPEED;
                     _speedBoost = 0.95f;
                     break;
                 case 2:
+                    _nameDifficulty = "Нормальный";
                     _snakeSpeed = 400;
                     _speedBoost = 0.85f;
                     break;
                 case 3:
+                    _nameDifficulty = "Сложный";
                     _snakeSpeed = 300;
                     _speedBoost = 0.80f;
                     break;
             }
+
+            HighScoreLabel = _databaseService.GetHighScore(_nameDifficulty);
 
             while (ContinueGame)
             {
@@ -181,7 +187,7 @@ namespace Snake.ViewModels
                 catch (Exception)
                 {
                     ContinueGame = false;
-                    _databaseService.Add(new ScoresModel { Id = _databaseService.GetMaxIdScore() + 1, Score = ScoreLabel });
+                    _databaseService.Add(new ScoresModel { Id = _databaseService.GetMaxIdScore() + 1, Difficulty = _nameDifficulty, Score = ScoreLabel });
                     _mainView.ShowPopup(new GameOverPageView(this));
                 }
             }
@@ -205,7 +211,7 @@ namespace Snake.ViewModels
         {
             VisibleStartButton = true;
             ScoreLabel = -1;
-            HighScoreLabel = _databaseService.GetHighScore();
+            HighScoreLabel = _databaseService.GetHighScore(_nameDifficulty);
             _snakeSpeed = SPEED;
             _speedBoost = 0.95f;
             _snake.Restart();
