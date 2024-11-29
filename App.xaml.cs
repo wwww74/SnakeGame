@@ -1,11 +1,14 @@
-﻿namespace Snake
+﻿using Snake.Interfaces;
+using Snake.ViewModels;
+
+namespace Snake
 {
     public partial class App : Application
     {
-        public App()
+        public App(IWindowService windowService)
         {
             InitializeComponent();
-            MainPage = new AppShell();
+            MainPage = windowService.GetAndCreateContentPage<MainPageViewModel>().View;
         }
     }
 }

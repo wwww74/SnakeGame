@@ -1,7 +1,6 @@
 ﻿using Snake.Base;
 using Snake.Interfaces;
 using Snake.Models;
-using Snake.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -11,11 +10,14 @@ namespace Snake.ViewModels
     {
         private bool _visibleLevelPanel;
         private bool _visibleScorePanel;
+
         private readonly IDatabaseService _databaseService;
+        private readonly IWindowService _windowService;
         public ObservableCollection<ScoresModel> ScoreList { get; set; }
-        public MainPageViewModel(IDatabaseService databaseService)
+        public MainPageViewModel(IDatabaseService databaseService, IWindowService windowService)
         {
             _databaseService = databaseService;
+            _windowService = windowService;
 
             StartGameCommand = new RelayCommand(StartGameButton_Click);
             HideLevelPanelCommand = new RelayCommand(HideLevelPanel_Click);
@@ -63,10 +65,11 @@ namespace Snake.ViewModels
         #region NavigationButton
         private void StartGameButton_Click(object parameter) => VisibleLevelPanel = !VisibleLevelPanel;
         private void HideLevelPanel_Click(object parameter) => VisibleLevelPanel = false;
-        private async void SelectedDifficult_Click(object parameter)
+        private void SelectedDifficult_Click(object parameter)
         {
             VisibleLevelPanel = false;
-            await Shell.Current.GoToAsync(nameof(GamePageView), true, new Dictionary<string, object> { { "parameter", parameter } });
+            Preferences.Set("difficulty", parameter.ToString());
+            Application.Current.MainPage = _windowService.GetAndCreateContentPage<GamePageViewModel>().View;
         }
         private void ScoreButton_Click(object parameter)
         {

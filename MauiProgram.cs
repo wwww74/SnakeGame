@@ -26,6 +26,7 @@ namespace Snake
             });
 
             builder.Services.AddTransient<IDatabaseService, DatabaseService>();
+            builder.Services.AddTransient<IWindowService, WindowService>();
 
             builder.Services.AddTransient<MainPageViewModel>();
             builder.Services.AddTransient<GamePageViewModel>();

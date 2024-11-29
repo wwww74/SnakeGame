@@ -1,14 +1,11 @@
-﻿using CommunityToolkit.Maui.Views;
-using Snake.Base;
+﻿using Snake.Base;
 using Snake.Enumerated;
 using Snake.Interfaces;
 using Snake.Models;
-using Snake.Views;
 using System.Windows.Input;
 
 namespace Snake.ViewModels
 {
-    [QueryProperty(nameof(Difficulty), "parameter")]
     public class GamePageViewModel : BaseViewModel
     {
         #region GameVariable
@@ -21,31 +18,37 @@ namespace Snake.ViewModels
         private float _speedBoost = 0.95f;
         private int _scoreCount;
         private int _highScore;
-        private int _difficulty;
         private string _nameDifficulty;
+        public string Difficulty;
 
         private SnakeModel _snake;
         private MoveDirection _currentMoveDirection = MoveDirection.Right;
         private CellViewModel _lastFood;
-        private readonly GamePageView _mainView;
+        private bool _visibleGameOverPanel;
         public List<List<CellViewModel>> GameArea { get; } = new List<List<CellViewModel>>();
 
         private readonly IDatabaseService _databaseService;
+        private readonly IWindowService _windowService;
         #endregion
 
-        public GamePageViewModel(GamePageView mainPageView, IDatabaseService databaseService)
+        public GamePageViewModel(IDatabaseService databaseService, IWindowService windowService)
         {
-            _mainView = mainPageView;
             _databaseService = databaseService;
+            _windowService = windowService;
+
             VisibleStartButton = true;
+            VisibleGameOverPanel = false;
             ScoreLabel = -1;
             HighScoreLabel = 0;
+            Difficulty = Preferences.Get("difficulty", "1");
 
             StartGameCommand = new RelayCommand(StartGameButton_Click);
             MoveUpCommand = new RelayCommand(MoveUpButton_Click);
             MoveDownCommand = new RelayCommand(MoveDownButton_Click);
             MoveLeftCommand = new RelayCommand(MoveLeftButton_Click);
             MoveRightCommand = new RelayCommand(MoveRightButton_Click);
+            RestartGameCommand = new RelayCommand(RestartGameButton_Click);
+            ShowMenuCommand = new RelayCommand(ShowMenuButton_Click);
 
             for (int row = 0; row < _rowCount; row++)
             {
@@ -66,10 +69,25 @@ namespace Snake.ViewModels
 
         #region ICommand
         public ICommand StartGameCommand { get; }
+        public ICommand RestartGameCommand { get; }
+        public ICommand ShowMenuCommand { get; }
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
+        #endregion
+
+        #region ICommandMethods
+        private void RestartGameButton_Click(object parameter)
+        {
+            RestartGame();
+            VisibleGameOverPanel = false;
+        }
+        private void ShowMenuButton_Click(object parameter)
+        {
+            VisibleGameOverPanel = false;
+            Application.Current.MainPage = _windowService.GetAndCreateContentPage<MainPageViewModel>().View;
+        }
         #endregion
 
         #region ViewProperty
@@ -93,13 +111,13 @@ namespace Snake.ViewModels
                 OnPropertyChanged(nameof(VisibleStartButton));
             }
         }
-        public int Difficulty
+        public bool VisibleGameOverPanel
         {
-            get => _difficulty;
+            get => _visibleGameOverPanel;
             set
             {
-                _difficulty = value;
-                OnPropertyChanged(nameof(Difficulty));
+                _visibleGameOverPanel = value;
+                OnPropertyChanged(nameof(VisibleGameOverPanel));
             }
         }
         public int ScoreLabel
@@ -157,17 +175,17 @@ namespace Snake.ViewModels
         {
             switch (Difficulty)
             {
-                case 1:
+                case "1":
                     _nameDifficulty = "Легкий";
                     _snakeSpeed = SPEED;
                     _speedBoost = 0.95f;
                     break;
-                case 2:
+                case "2":
                     _nameDifficulty = "Нормальный";
                     _snakeSpeed = 400;
                     _speedBoost = 0.85f;
                     break;
-                case 3:
+                case "3":
                     _nameDifficulty = "Сложный";
                     _snakeSpeed = 300;
                     _speedBoost = 0.80f;
@@ -188,7 +206,7 @@ namespace Snake.ViewModels
                 {
                     ContinueGame = false;
                     _databaseService.Add(new ScoresModel { Id = _databaseService.GetMaxIdScore() + 1, Difficulty = _nameDifficulty, Score = ScoreLabel });
-                    _mainView.ShowPopup(new GameOverPageView(this));
+                    VisibleGameOverPanel = true;
                 }
             }
         }
@@ -218,7 +236,6 @@ namespace Snake.ViewModels
             _lastFood.CellType = CellType.None;
             CreateFood();
         }
-
         #endregion
     }
 }
